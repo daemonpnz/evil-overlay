@@ -18,11 +18,12 @@ EGIT_BOOTSTRAP="bootstrap.sh"
 
 RDEPEND="dev-libs/dbus-glib
 	>=dev-libs/glib-2.16
-	>=gnome-base/libglade-2
-	x11-libs/gtk+:2
+	!gtk3? ( x11-libs/gtk+:2 )
+	gtk3? ( x11-libs/gtk+:3 )
 	x11-libs/libICE
 	x11-libs/libSM
-	>=x11-libs/vte-0.11.11:0"
+	!gtk3? ( >=x11-libs/vte-0.11.11:0 )
+	gtk3? ( >=x11-libs/vte-0.27.3:2.90 )"
 DEPEND="${RDEPEND}
 	dev-util/pkgconfig"
 
@@ -31,6 +32,9 @@ DOCS=( AUTHORS ChangeLog NEWS README TODO )
 src_prepare() {
 	epatch "${FILESDIR}"/roxterm-2.0-gentoo-build.patch || die "Patching bootstrap.sh failed"
 	sed -i -e 's:TerminalEmulator:System;&:' roxterm.desktop || die
+	touch Help/lib/roxterm_logo.png
+	touch Help/lib/logo_text.png
+	touch Help/lib/favicon.ico
 	git_src_prepare
 }
 
